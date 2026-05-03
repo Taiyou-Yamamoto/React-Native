@@ -1,24 +1,22 @@
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { registerRootComponent } from 'expo';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import HomeScreen from './HomeScreen';
+import DetailScreen from './DetailScreen';
+import LoginScreen from './LoginScreen';
+import { useState } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import AppNavigator from '../navigation/AppNavigator';
 
-const App = () => {
+const Stack = createNativeStackNavigator();
+
+function App() {
     return (
-        <View style={styles.container}>
-            <Text>Open up app.tsx to start</Text>
-            <StatusBar style='auto' />
-        </View>
+        <SafeAreaProvider>
+            <AppNavigator />
+        </SafeAreaProvider>
     );
-};
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
+}
 
 // exportを忘れるとホットリロードができないので注意
 export default App;

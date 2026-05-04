@@ -1,13 +1,51 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTasks } from '../hooks/useTasks';
 import { TaskItem } from '../components/TaskItem';
+import { TaskLog } from '../types';
+import { BASE_URL } from '../config/api';
 
 export const MainScreen = () => {
     const [memo, setMemo] = useState('');
+    const [logs, setLogs] = useState<TaskLog[]>([
+        { id: '1', memo: 'Expressの基礎を学ぶ', status: 'pending' },
+        { id: '2', memo: 'React NativeのUIを作る', status: 'done' },
+    ]);
+    const [loading, setLoading] = useState(false);
 
-    const { logs, loading, addTask, completeTask } = useTasks();
+    const addTask = async (memo: string) => {
+        if (!memo.trim()) {
+            Alert.alert('エラー', 'タスクを入力してください');
+            return false;
+        }
+
+        setLoading(true);
+        try {
+            console.log(`[POST] ${BASE_URL} へ送信:`, { memo });
+            const newTask: TaskLog = { id: Date.now().toString(), memo: memo, status: 'pending' };
+            setLogs([newTask, ...logs]);
+            return true;
+        } catch (error) {
+            console.error(error);
+            Alert.alert('エラー', '追加に失敗しました');
+            return false;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const completeTask = async (taskId: string) => {
+        setLoading(true);
+        try {
+            console.log(`[PATCH] ${BASE_URL}/${taskId} のステータスを更新`);
+            setLogs(logs.map((log) => (log.id === taskId ? { ...log, status: 'done' } : log)));
+        } catch (error) {
+            console.error(error);
+            Alert.alert('エラー', '更新に失敗しました');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleAdd = async () => {
         const success = await addTask(memo);

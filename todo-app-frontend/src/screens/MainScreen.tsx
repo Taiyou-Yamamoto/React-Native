@@ -13,6 +13,19 @@ export const MainScreen = () => {
     ]);
     const [loading, setLoading] = useState(false);
 
+    const completeTask = async (taskId: string) => {
+        setLoading(true);
+        try {
+            console.log(`[PATCH] ${BASE_URL}/${taskId} のステータスを更新`);
+            setLogs(logs.map((log) => (log.id === taskId ? { ...log, status: 'done' } : log)));
+        } catch (error) {
+            console.error(error);
+            Alert.alert('エラー', '更新に失敗しました');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const addTask = async (memo: string) => {
         if (!memo.trim()) {
             Alert.alert('エラー', 'タスクを入力してください');
@@ -29,19 +42,6 @@ export const MainScreen = () => {
             console.error(error);
             Alert.alert('エラー', '追加に失敗しました');
             return false;
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const completeTask = async (taskId: string) => {
-        setLoading(true);
-        try {
-            console.log(`[PATCH] ${BASE_URL}/${taskId} のステータスを更新`);
-            setLogs(logs.map((log) => (log.id === taskId ? { ...log, status: 'done' } : log)));
-        } catch (error) {
-            console.error(error);
-            Alert.alert('エラー', '更新に失敗しました');
         } finally {
             setLoading(false);
         }

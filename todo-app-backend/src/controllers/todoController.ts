@@ -7,12 +7,13 @@ const getAllTodos = (_: Request, res: Response) => {
 
 const createTodo = (req: Request, res: Response) => {
     TodoService.createTodo(req.body.memo);
-    res.status(200).json({ message: 'created successfully' });
+    res.status(201).json({ message: 'created successfully' });
 };
 
 const deleteTodo = (req: Request, res: Response) => {
-    if (typeof req.params.id === 'string') {
-        TodoService.deleteTodo(req.params.id);
+    const { id } = req.params;
+    if (typeof id === 'string') {
+        TodoService.deleteTodo(id);
         return res.status(200).json({ message: 'Deleted successfully' });
     }
     res.status(400).json({ message: 'invalid id' });

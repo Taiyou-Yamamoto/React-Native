@@ -1,9 +1,11 @@
 import express from 'express';
+import cors from 'cors';
 import { todoRoutes } from './routes/todoRoutes.js';
 import { ApiError } from './utils/ApiError.js';
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.use('/todos', todoRoutes);

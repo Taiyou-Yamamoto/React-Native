@@ -2,15 +2,15 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { TaskLog } from '../types';
 
-// 💡 親画面から受け取るデータの型
 type Props = {
     item: TaskLog;
     onComplete: (id: string) => void;
+    onDelete: (id: string) => void;
 };
 
-export const TaskItem = ({ item, onComplete }: Props) => {
+export const TaskItem = ({ item, onComplete, onDelete }: Props) => {
     return (
-        <View style={styles.logItem}>
+        <TouchableOpacity style={styles.logItem} onLongPress={() => onDelete(item.id)}>
             <View style={styles.logTextContainer}>
                 <Text style={[styles.statusBadge, item.status === 'done' && styles.statusDone]}>{item.status === 'done' ? '完了' : '作業中'}</Text>
                 <Text style={[styles.logMemo, item.status === 'done' && styles.logMemoDone]}>{item.memo}</Text>
@@ -21,7 +21,7 @@ export const TaskItem = ({ item, onComplete }: Props) => {
                     <Text style={styles.completeButtonText}>完了にする</Text>
                 </TouchableOpacity>
             )}
-        </View>
+        </TouchableOpacity>
     );
 };
 

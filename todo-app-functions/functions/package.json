@@ -1,0 +1,17 @@
+{
+    "name": "todo-app-functions",
+    "version": "1.0.0",
+    "main": "dist/index.js",
+    "type": "module",
+    "scripts": {
+        "build": "tsc",
+        "gcp-build": "npm run build"
+    },
+    "dependencies": {
+        "@google-cloud/functions-framework": "^5.0.2"
+    },
+    "devDependencies": {
+        "typescript": "^5.0.0",
+        "@types/node": "^20.0.0"
+    }
+}

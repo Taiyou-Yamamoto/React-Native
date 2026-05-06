@@ -1,21 +1,30 @@
+import { FieldValue } from 'firebase-admin/firestore';
+import db from '../config/firebase.js';
 import { TaskLog } from '../types/index.js';
 
-let data = [{ id: '1', memo: '買い物に行く!', status: 'pending' }] satisfies TaskLog[];
+const getAllTodos = async (): Promise<TaskLog[]> => {
+    const snapshot = await db.collection('todos').orderBy('createdAt', 'asc').get();
 
-const getAllTodos = (): TaskLog[] => {
-    return data;
+    const todos = snapshot.docs.map((doc) => {
+        return {
+            id: doc.id,
+            ...doc.data(),
+        } as TaskLog;
+    });
+
+    return todos;
 };
 
-const createTodo = (memo: TaskLog['memo']): TaskLog => {
-    const newData = { id: Date.now().toString(), memo, status: 'pending' as const };
-
-    data = [...data, newData];
-
-    return newData;
+const createTodo = async (memo: string): Promise<void> => {
+    await db.collection('todos').add({
+        memo,
+        status: 'pending',
+        createdAt: FieldValue.serverTimestamp(),
+    });
 };
 
-const deleteTodo = (id: TaskLog['id']) => {
-    data = data.filter((item) => item.id !== id);
+const deleteTodo = async (id: TaskLog['id']): Promise<void> => {
+    await db.collection('todos').doc(id).delete();
 };
 
 const TodoService = {

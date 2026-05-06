@@ -1,22 +1,23 @@
 import { Request, Response } from 'express';
 import TodoService from '../services/todoService.js';
 
-const getAllTodos = (_: Request, res: Response) => {
-    res.status(200).json(TodoService.getAllTodos());
+const getAllTodos = async (_: Request, res: Response) => {
+    const todos = await TodoService.getAllTodos();
+    res.status(200).json(todos);
 };
 
-const createTodo = (req: Request, res: Response) => {
-    TodoService.createTodo(req.body.memo);
+const createTodo = async (req: Request, res: Response) => {
+    await TodoService.createTodo(req.body.memo);
     res.status(201).json({ message: 'created successfully' });
 };
 
-const deleteTodo = (req: Request, res: Response) => {
+const deleteTodo = async (req: Request, res: Response) => {
     const { id } = req.params;
-    if (typeof id === 'string') {
-        TodoService.deleteTodo(id);
-        return res.status(200).json({ message: 'Deleted successfully' });
+    if (typeof id !== 'string') {
+        return res.status(400).json({ message: 'invalid id' });
     }
-    res.status(400).json({ message: 'invalid id' });
+    await TodoService.deleteTodo(id);
+    res.status(200).json({ message: 'Deleted successfully' });
 };
 
 const TodoController = {

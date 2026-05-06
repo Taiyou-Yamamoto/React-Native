@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { TodoService } from '../services/todoService.js';
+import TodoService from '../services/todoService.js';
 
 const getAllTodos = (_: Request, res: Response) => {
     res.status(200).json(TodoService.getAllTodos());
@@ -18,8 +18,10 @@ const deleteTodo = (req: Request, res: Response) => {
     res.status(400).json({ message: 'invalid id' });
 };
 
-export const TodoController = {
+const TodoController = {
     getAllTodos,
     createTodo,
     deleteTodo,
 };
+
+export default TodoController;

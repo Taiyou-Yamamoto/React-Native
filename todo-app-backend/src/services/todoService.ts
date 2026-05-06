@@ -18,8 +18,10 @@ const deleteTodo = (id: TaskLog['id']) => {
     data = data.filter((item) => item.id !== id);
 };
 
-export const TodoService = {
+const TodoService = {
     getAllTodos,
     createTodo,
     deleteTodo,
 };
+
+export default TodoService;

@@ -5,13 +5,16 @@
     "type": "module",
     "scripts": {
         "build": "tsc",
-        "gcp-build": "npm run build"
+        "gcp-build": "npm run build",
+        "deploy": "gcloud functions deploy celebrate --gen2 --runtime=nodejs24 --region=asia-northeast1 --trigger-location=asia-northeast1 --source=. --entry-point=onTaskUpdated --trigger-event-filters=\"type=google.cloud.firestore.document.v1.updated\" --trigger-event-filters=\"database=(default)\" --trigger-event-filters-path-pattern=\"document=todos/{taskId}\""
     },
     "dependencies": {
-        "@google-cloud/functions-framework": "^5.0.2"
+        "@google/events": "^5.4.0",
+        "firebase-admin": "^13.8.0",
+        "firebase-functions": "^7.2.5"
     },
     "devDependencies": {
-        "typescript": "^5.0.0",
-        "@types/node": "^20.0.0"
+        "@types/node": "^20.0.0",
+        "typescript": "^5.0.0"
     }
 }

@@ -1,7 +1,10 @@
-import { cloudEvent, CloudEvent } from '@google-cloud/functions-framework';
+import { onDocumentUpdated } from 'firebase-functions/v2/firestore';
 import { handleCelebration } from './utils/pushbanner.js';
+import { initializeApp } from 'firebase-admin/app';
 
-// gcloudコマンドの --entry-point で指定する名前と一致させます
-cloudEvent('onTaskUpdated', (event: CloudEvent<any>) => {
+initializeApp();
+
+export const onTaskUpdated = onDocumentUpdated({ document: 'todos/{taskId}' }, (event) => {
     handleCelebration(event);
+    console.log('pass');
 });
